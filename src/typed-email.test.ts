@@ -1,4 +1,4 @@
-import * as T from "typed";
+import { toErr } from "typed";
 
 import { email } from "./typed-email";
 
@@ -35,14 +35,14 @@ const INVALID_EMAIL = [
 
 describe.each(VALID_EMAIL)("email(%s)", (value) => {
   test("is valid", () => {
-    expect(email(value)).toEqual(T.success(value));
+    expect(email(value).isOk()).toEqual(true);
   });
 });
 
 describe.each(INVALID_EMAIL)("email(%s)", (value) => {
   test("is invalid", () => {
-    expect(email(value)).toEqual(
-      T.failure(T.toError(`Expecting string to be a valid 'email'`)),
+    expect(email(value).unwrapErr()).toEqual(
+      toErr(`Expecting string to be a valid 'email'.`),
     );
   });
 });

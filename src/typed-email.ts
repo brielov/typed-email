@@ -1,4 +1,5 @@
-import * as T from "typed";
+import { Err, Ok } from "rsts";
+import { map, string, toErr } from "typed";
 
 /**
  * RFC822 compliant email address
@@ -11,9 +12,9 @@ const EMAIL_REGEX =
  * Check that the given value is a valid email address.
  * @note This trims and lowercases the value before checking.
  */
-export const email = T.map(T.string, (value) => {
+export const email = map(string, (value) => {
   value = value.trim().toLowerCase();
   return value.length <= 320 && EMAIL_REGEX.test(value)
-    ? T.success(value)
-    : T.failure(T.toError(`Expecting string to be a valid 'email'`));
+    ? Ok(value)
+    : Err(toErr(`Expecting string to be a valid 'email'.`));
 });
